@@ -71,7 +71,7 @@ def create_app(test_config=None):
     categories = Category.query.order_by(Category.id).all()
     formatedCategories = {category.id: category.type for category in categories}
 
-    if len(questions) == 0:
+    if len(current_questions) == 0:
       abort(404)
 
     return jsonify({
