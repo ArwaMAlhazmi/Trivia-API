@@ -23,7 +23,7 @@ class QuestionView extends Component {
 
   getQuestions = () => {
     $.ajax({
-      url: `/questions?page=${this.state.page}`, //TODO: update request URL
+      url: `/questions?page=${this.state.page}`, //request URL
       type: "GET",
       success: (result) => {
         this.setState({
@@ -41,7 +41,12 @@ class QuestionView extends Component {
   }
 
   selectPage(num) {
-    this.setState({page: num}, () => this.getQuestions());
+    // use different routs based on category
+    if (this.state.currentCategory) {
+      this.setState({page: num}, () => this.getByCategory(this.state.currentCategory.id));
+    } else {
+      this.setState({page: num}, () => this.getQuestions());
+    }
   }
 
   createPagination(){
@@ -60,7 +65,7 @@ class QuestionView extends Component {
 
   getByCategory= (id) => {
     $.ajax({
-      url: `/categories/${id}/questions`, //TODO: update request URL
+      url: `/categories/${id}/questions?page=${this.state.page}`, //request URL
       type: "GET",
       success: (result) => {
         this.setState({
@@ -78,7 +83,7 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
+      url: `/questions`, //request URL
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',
@@ -105,7 +110,7 @@ class QuestionView extends Component {
     if(action === 'DELETE') {
       if(window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
-          url: `/questions/${id}`, //TODO: update request URL
+          url: `/questions/${id}`, //request URL
           type: "DELETE",
           success: (result) => {
             this.getQuestions();
